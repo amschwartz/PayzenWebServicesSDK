@@ -3,7 +3,9 @@
 This SDK simplifies the use of Web Services SOAP Payzen v5 in order to make payment operations. 
 
 ## Basic Usage ##
-To use this SDK in your Java project you can download the last version here. 
+To use this SDK in your Java project you can download the last version here:
+
+http://profesorfalken.github.io/lib/PayzenWebServicesSDK-0.1.jar
 
 The only dependencies are:
 
