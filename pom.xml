@@ -5,6 +5,23 @@
     <artifactId>PayzenWebServicesSDK</artifactId>
     <version>0.1</version>
     <packaging>jar</packaging>
+    
+    <name>Payzen Webservices SDK</name>
+    <description>SDK to use Payzen SOAP Web Services</description>
+    <url>https://github.com/profesorfalken/PayzenWebServicesSDK</url>
+
+    <licenses>
+      <license>
+        <name>Apache License, Version 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
+    
+    <scm>
+        <url>https://github.com/profesorfalken/PayzenWebServicesSDK.git</url>
+    </scm>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.5</maven.compiler.source>

@@ -28,6 +28,7 @@ import org.pfalken.payzen.webservices.sdk.builder.request.CardRequestBuilder;
 import org.pfalken.payzen.webservices.sdk.builder.request.OrderRequestBuilder;
 import org.pfalken.payzen.webservices.sdk.builder.request.PaymentRequestBuilder;
 import org.pfalken.payzen.webservices.sdk.handler.response.LogResponseHandler;
+import org.pfalken.payzen.webservices.sdk.util.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
  * @author javier
  */
 public class PaymentTest {
+
     private static final Logger logger = LoggerFactory.getLogger(LogResponseHandler.class);
 
     public PaymentTest() {
@@ -64,23 +66,27 @@ public class PaymentTest {
     public void testCreate() {
         logger.info("Test create simple");
 
-        ServiceResult result = create("TestTRS",
-                100,
-                978,
-                "4970100000000003",
-                12,
-                2017,
-                "123",
-                new LogAndCheckResponseHandler()
-        );
+        if (checkConfig()) {
+            ServiceResult result = create("TestTRS",
+                    100,
+                    978,
+                    "4970100000000003",
+                    12,
+                    2017,
+                    "123",
+                    new LogAndCheckResponseHandler()
+            );
 
-        String trsUuid = (result != null && result.getPaymentResponse() != null && result.getPaymentResponse().getTransactionUuid() != null)
-                ? result.getPaymentResponse().getTransactionUuid() : null;
+            String trsUuid = (result != null && result.getPaymentResponse() != null && result.getPaymentResponse().getTransactionUuid() != null)
+                    ? result.getPaymentResponse().getTransactionUuid() : null;
 
-        Assert.assertNotNull("Not UUID generated", trsUuid);
+            Assert.assertNotNull("Not UUID generated", trsUuid);
 
-        //Verify transaction
-        details(trsUuid, new LogAndCheckResponseHandler());
+            //Verify transaction
+            details(trsUuid, new LogAndCheckResponseHandler());
+        } else {
+            logger.info("Config not set");
+        }
 
         logger.info("End Test create");
     }
@@ -92,12 +98,16 @@ public class PaymentTest {
     public void testCreateFull() {
         logger.info("Test create full");
 
-        String trsUuid = createNormalPayment("4970100000000003");
+        if (checkConfig()) {
+            String trsUuid = createNormalPayment("4970100000000003");
 
-        Assert.assertNotNull("Not UUID generated", trsUuid != null);
+            Assert.assertNotNull("Not UUID generated", trsUuid != null);
 
-        //Verify transaction
-        details(trsUuid, new LogAndCheckResponseHandler());
+            //Verify transaction
+            details(trsUuid, new LogAndCheckResponseHandler());
+        } else {
+            logger.info("Config not set");
+        }
 
         logger.info("End create full");
     }
@@ -109,13 +119,17 @@ public class PaymentTest {
     public void testDetails() {
         logger.info("Test details simple");
 
-        String trsUuid = createNormalPayment("4970100000000003");
+        if (checkConfig()) {
+            String trsUuid = createNormalPayment("4970100000000003");
 
-        Assert.assertNotNull("Not UUID generated", trsUuid != null);
+            Assert.assertNotNull("Not UUID generated", trsUuid != null);
 
-        ServiceResult result = details(trsUuid, new LogAndCheckResponseHandler());
-        int responseCode = result.getCommonResponse().getResponseCode();
-        Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
+            ServiceResult result = details(trsUuid, new LogAndCheckResponseHandler());
+            int responseCode = result.getCommonResponse().getResponseCode();
+            Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
+        } else {
+            logger.info("Config not set");
+        }
 
         logger.info("Test details full");
     }
@@ -127,48 +141,52 @@ public class PaymentTest {
     public void testDetailsByFind() {
         logger.info("Test details using find");
 
-        OrderRequestBuilder orderRequestBuilder
-                = OrderRequestBuilder
-                .create()
-                .orderId("TestTRS");
+        if (checkConfig()) {
+            OrderRequestBuilder orderRequestBuilder
+                    = OrderRequestBuilder
+                    .create()
+                    .orderId("TestTRS");
 
-        PaymentRequestBuilder paymentRequestBuilder
-                = PaymentRequestBuilder
-                .create()
-                .amount(100)
-                .currency(978);
+            PaymentRequestBuilder paymentRequestBuilder
+                    = PaymentRequestBuilder
+                    .create()
+                    .amount(100)
+                    .currency(978);
 
-        CardRequestBuilder cardRequestBuilder
-                = CardRequestBuilder
-                .create()
-                .number("4970100000000003")
-                .scheme("CB")
-                .expiryMonth(12)
-                .expiryYear(2017)
-                .cardSecurityCode("123");
+            CardRequestBuilder cardRequestBuilder
+                    = CardRequestBuilder
+                    .create()
+                    .number("4970100000000003")
+                    .scheme("CB")
+                    .expiryMonth(12)
+                    .expiryYear(2017)
+                    .cardSecurityCode("123");
 
-        ServiceResult result = create(PaymentBuilder
-                .getBuilder()
-                .order(orderRequestBuilder.build())
-                .payment(paymentRequestBuilder.build())
-                .card(cardRequestBuilder.build())
-                .comment("Test payment")
-                .buildCreate(),
-                new LogAndCheckResponseHandler()
-        );
-        Assert.assertNotNull("Not UUID generated", result.getPaymentResponse());
-        Assert.assertNotNull("Not UUID generated", result.getPaymentResponse().getTransactionId());
-        Assert.assertNotNull("Not UUID generated", result.getPaymentResponse().getSequenceNumber());
-        Assert.assertNotNull("Not UUID generated", result.getPaymentResponse().getCreationDate());
+            ServiceResult result = create(PaymentBuilder
+                    .getBuilder()
+                    .order(orderRequestBuilder.build())
+                    .payment(paymentRequestBuilder.build())
+                    .card(cardRequestBuilder.build())
+                    .comment("Test payment")
+                    .buildCreate(),
+                    new LogAndCheckResponseHandler()
+            );
+            Assert.assertNotNull("Not UUID generated", result.getPaymentResponse());
+            Assert.assertNotNull("Not UUID generated", result.getPaymentResponse().getTransactionId());
+            Assert.assertNotNull("Not UUID generated", result.getPaymentResponse().getSequenceNumber());
+            Assert.assertNotNull("Not UUID generated", result.getPaymentResponse().getCreationDate());
 
-        String transactionId = result.getPaymentResponse().getTransactionId();
-        int sequenceNumber = result.getPaymentResponse().getSequenceNumber();
-        Date creationDate = result.getPaymentResponse().getCreationDate().toGregorianCalendar().getTime();
+            String transactionId = result.getPaymentResponse().getTransactionId();
+            int sequenceNumber = result.getPaymentResponse().getSequenceNumber();
+            Date creationDate = result.getPaymentResponse().getCreationDate().toGregorianCalendar().getTime();
 
-        result = details(transactionId, creationDate, sequenceNumber, new LogAndCheckResponseHandler());
+            result = details(transactionId, creationDate, sequenceNumber, new LogAndCheckResponseHandler());
 
-        int responseCode = result.getCommonResponse().getResponseCode();
-        Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
+            int responseCode = result.getCommonResponse().getResponseCode();
+            Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
+        } else {
+            logger.info("Config not set");
+        }
 
         logger.info("Test details full");
     }
@@ -176,43 +194,47 @@ public class PaymentTest {
     private String createNormalPayment(String cardNumber) {
         String trsUuid = null;
 
-        OrderRequestBuilder orderRequestBuilder
-                = OrderRequestBuilder
-                .create()
-                .orderId("TestTRS");
+        if (checkConfig()) {
+            OrderRequestBuilder orderRequestBuilder
+                    = OrderRequestBuilder
+                    .create()
+                    .orderId("TestTRS");
 
-        PaymentRequestBuilder paymentRequestBuilder
-                = PaymentRequestBuilder
-                .create()
-                .amount(100)
-                .currency(978);
+            PaymentRequestBuilder paymentRequestBuilder
+                    = PaymentRequestBuilder
+                    .create()
+                    .amount(100)
+                    .currency(978);
 
-        CardRequestBuilder cardRequestBuilder
-                = CardRequestBuilder
-                .create()
-                .number(cardNumber)
-                .scheme("CB")
-                .expiryMonth(12)
-                .expiryYear(2017)
-                .cardSecurityCode("123");
+            CardRequestBuilder cardRequestBuilder
+                    = CardRequestBuilder
+                    .create()
+                    .number(cardNumber)
+                    .scheme("CB")
+                    .expiryMonth(12)
+                    .expiryYear(2017)
+                    .cardSecurityCode("123");
 
-        ServiceResult result = create(PaymentBuilder
-                .getBuilder()
-                .order(orderRequestBuilder.build())
-                .payment(paymentRequestBuilder.build())
-                .card(cardRequestBuilder.build())
-                .comment("Test payment")
-                .buildCreate(),
-                new LogAndCheckResponseHandler()
-        );
+            ServiceResult result = create(PaymentBuilder
+                    .getBuilder()
+                    .order(orderRequestBuilder.build())
+                    .payment(paymentRequestBuilder.build())
+                    .card(cardRequestBuilder.build())
+                    .comment("Test payment")
+                    .buildCreate(),
+                    new LogAndCheckResponseHandler()
+            );
 
-        if (result != null && result.getPaymentResponse() != null) {
-            trsUuid = result.getPaymentResponse().getTransactionUuid();
+            if (result != null && result.getPaymentResponse() != null) {
+                trsUuid = result.getPaymentResponse().getTransactionUuid();
+            }
+        } else {
+            logger.info("Config not set");
         }
 
         return trsUuid;
     }
-    
+
     private class LogAndCheckResponseHandler extends LogResponseHandler {
 
         @Override
@@ -225,4 +247,10 @@ public class PaymentTest {
         }
     }
 
+    private boolean checkConfig() {
+        if ("[NOT SET]".equals(Config.getConfig().getProperty("shopId"))) {
+            return false;
+        }
+        return true;
+    }
 }

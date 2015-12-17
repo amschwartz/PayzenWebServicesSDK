@@ -26,12 +26,14 @@ import java.util.Date;
  * 
  * All the methods are represented by verbs, and they allow different modes for 
  * each operation: 
+ * <ul>
  * <li>Simple/Full mode: allows to perform a simple operation with simplified 
  * parameters or use instead a complete mode which can be easily handled using 
  * object builders.</li>
  * <li>With/without response handler: the usage of a response handler allows 
  * to create easily a callback model which help to work with the result and 
  * is ready to work with new Java 8 features. </li>
+ * </ul>
  * 
  * @author Javier Garcia Alonso
  */
