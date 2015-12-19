@@ -5,7 +5,7 @@ This SDK simplifies the use of Web Services SOAP Payzen v5 in order to make paym
 ## Basic Usage ##
 To use this SDK in your Java project you can download the last version here:
 
-http://profesorfalken.github.io/lib/PayzenWebServicesSDK-0.1.jar
+http://profesorfalken.github.io/lib/PayzenWebServicesSDK-0.1.1.jar
 
 The only dependencies are:
 
