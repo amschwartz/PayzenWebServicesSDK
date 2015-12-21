@@ -33,6 +33,7 @@ import com.lyra.vads.ws.v5.ShoppingCartResponse;
 import com.lyra.vads.ws.v5.SubscriptionResponse;
 import com.lyra.vads.ws.v5.ThreeDSResponse;
 import com.lyra.vads.ws.v5.TokenResponse;
+import com.lyra.vads.ws.v5.UpdatePaymentResponse;
 import com.profesorfalken.payzen.webservices.sdk.util.Config;
 
 /**
@@ -93,6 +94,22 @@ public final class ServiceResult {
     
     public ServiceResult(CancelPaymentResponse.CancelPaymentResult cancelResult) {
         commonResponse = cancelResult.getCommonResponse();
+    }
+    
+    public ServiceResult(UpdatePaymentResponse.UpdatePaymentResult updateResult) {
+        commonResponse = updateResult.getCommonResponse();
+        paymentResponse = updateResult.getPaymentResponse();
+        orderResponse = updateResult.getOrderResponse();
+        cardResponse = updateResult.getCardResponse();
+        authorizationResponse = updateResult.getAuthorizationResponse();
+        captureResponse = updateResult.getCaptureResponse();
+        customerResponse = updateResult.getCustomerResponse();
+        extraResponse = updateResult.getExtraResponse();
+        fraudManagementResponse = updateResult.getFraudManagementResponse();
+        markResponse = updateResult.getMarkResponse();
+        //shoppingCartResponse = detailsPaymentResult.getShoppingCartResponse();
+        subscriptionResponse = updateResult.getSubscriptionResponse();
+        threeDSResponse = updateResult.getThreeDSResponse();
     }
 
     public ServiceResult(GetPaymentUuidResponse.LegacyTransactionKeyResult getPaymentUuidResult) {

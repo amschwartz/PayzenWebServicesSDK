@@ -29,6 +29,7 @@ import com.lyra.vads.ws.v5.PaymentRequest;
 import com.lyra.vads.ws.v5.QueryRequest;
 import com.lyra.vads.ws.v5.ThreeDSMode;
 import com.lyra.vads.ws.v5.ThreeDSRequest;
+import com.lyra.vads.ws.v5.UpdatePaymentResponse;
 import java.util.Collections;
 import java.util.Date;
 import javax.xml.ws.BindingProvider;
@@ -431,6 +432,118 @@ final class PaymentInstance {
         ServiceResult serviceResult = cancelByFind(transactionId, creationDate, sequenceNumber);
 
         handleResponse(response, serviceResult);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param amount the new amount of the transaction
+     * 
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, long amount) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setAmount(amount);
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param captureDate expected capture date
+     * 
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, Date captureDate) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setExpectedCaptureDate(BuilderUtils.date2XMLGregorianCalendar(captureDate));
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param amount the new amount of the transaction
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, long amount, ResponseHandler response) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setAmount(amount);
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param captureDate expected capture date
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, Date captureDate, ResponseHandler response) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setExpectedCaptureDate(BuilderUtils.date2XMLGregorianCalendar(captureDate));
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
 
         return serviceResult;
     }

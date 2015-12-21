@@ -248,5 +248,30 @@ public final class Payment {
     public static ServiceResult cancel(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
         return getInstance().cancelByFind(transactionId, creationDate, sequenceNumber, response);
     }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param amount the new amount for the transaction
+     * @return result with all the response objects
+     */
+    public static ServiceResult cancel(String uuidTransaction, long amount) {
+        return getInstance().updateSimple(uuidTransaction, amount);
+    }
 
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param captureDate expected capture date
+     * @return result with all the response objects
+     */
+    public static ServiceResult cancel(String uuidTransaction, Date captureDate) {
+        return getInstance().updateSimple(uuidTransaction, captureDate);
+    }
 }
