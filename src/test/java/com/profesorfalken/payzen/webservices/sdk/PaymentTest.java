@@ -235,6 +235,91 @@ public class PaymentTest {
         return trsUuid;
     }
 
+    /**
+     * Test of cancel method
+     */
+    @Test
+    public void testCancel() {
+        logger.info("Test cancel simple");
+
+        if (checkConfig()) {
+            ServiceResult result = create("TestTRS",
+                    100,
+                    978,
+                    "4970100000000003",
+                    12,
+                    2017,
+                    "123",
+                    new LogAndCheckResponseHandler()
+            );
+
+            String trsUuid = (result != null && result.getPaymentResponse() != null && result.getPaymentResponse().getTransactionUuid() != null)
+                    ? result.getPaymentResponse().getTransactionUuid() : null;
+
+            Assert.assertNotNull("Not UUID generated", trsUuid);
+
+            result = cancel(trsUuid,
+                    new LogAndCheckResponseHandler()
+            );
+            int responseCode = result.getCommonResponse().getResponseCode();
+            Assert.assertTrue("Cannot cancel. Error code: " + responseCode, responseCode == 0);
+
+            result = details(trsUuid, new LogAndCheckResponseHandler());
+
+            responseCode = result.getCommonResponse().getResponseCode();
+            Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
+
+            Assert.assertTrue("Transaction is not correctly cancelled.", 
+                    "CANCELLED".equals(result.getCommonResponse().getTransactionStatusLabel()));
+
+        } else {
+            logger.info("Config not set");
+        }
+
+        logger.info("End Test cancel simple");
+    }
+    
+    /**
+     * Test of update method
+     */
+    @Test
+    public void testUpdate() {
+        logger.info("Test cancel simple");
+
+        if (checkConfig()) {
+            ServiceResult result = create("TestTRS",
+                    100,
+                    978,
+                    "4970100000000003",
+                    12,
+                    2017,
+                    "123",
+                    new LogAndCheckResponseHandler()
+            );
+
+            String trsUuid = (result != null && result.getPaymentResponse() != null && result.getPaymentResponse().getTransactionUuid() != null)
+                    ? result.getPaymentResponse().getTransactionUuid() : null;
+
+            Assert.assertNotNull("Not UUID generated", trsUuid);
+
+            result = update(trsUuid, 99L, 978);
+            int responseCode = result.getCommonResponse().getResponseCode();
+            Assert.assertTrue("Cannot update. Error code: " + responseCode, responseCode == 0);
+
+            result = details(trsUuid, new LogAndCheckResponseHandler());
+
+            responseCode = result.getCommonResponse().getResponseCode();
+            Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
+
+            Assert.assertTrue("Transaction was correctly modified.", 
+                    (result.getPaymentResponse().getAmount() == 99));
+        } else {
+            logger.info("Config not set");
+        }
+
+        logger.info("End Test cancel simple");
+    }
+
     private class LogAndCheckResponseHandler extends LogResponseHandler {
 
         @Override

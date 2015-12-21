@@ -15,6 +15,7 @@
  */
 package com.profesorfalken.payzen.webservices.sdk;
 
+import com.lyra.vads.ws.v5.CancelPaymentResponse;
 import com.lyra.vads.ws.v5.CardRequest;
 import com.lyra.vads.ws.v5.CommonRequest;
 import com.lyra.vads.ws.v5.CreatePayment;
@@ -28,6 +29,7 @@ import com.lyra.vads.ws.v5.PaymentRequest;
 import com.lyra.vads.ws.v5.QueryRequest;
 import com.lyra.vads.ws.v5.ThreeDSMode;
 import com.lyra.vads.ws.v5.ThreeDSRequest;
+import com.lyra.vads.ws.v5.UpdatePaymentResponse;
 import java.util.Collections;
 import java.util.Date;
 import javax.xml.ws.BindingProvider;
@@ -40,32 +42,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of methods used by Payment class to create web service 
- * requests related with payments. 
+ * Implementation of methods used by Payment class to create web service
+ * requests related with payments.
+ *
  * @see Payment
- * 
+ *
  * @author Javier Garcia Alonso
  */
 final class PaymentInstance {
+
     //Logger
     private static final Logger logger = LoggerFactory.getLogger(PaymentInstance.class);
 
     /**
      * Creates a payment request using the common parameters in a simple way.<p>
-     * 
-     * Please read official documentation for more detailed information about parameters.
-     * 
-     * @param orderId Optional, null is none. The order Id. 
+     *
+     * Please read official documentation for more detailed information about
+     * parameters.
+     *
+     * @param orderId Optional, null is none. The order Id.
      * @param amount Amount of the payment in cents
-     * @param currency used currency 
+     * @param currency used currency
      * @param cardNumber card number
      * @param expMonth expiration month
      * @param expYear expiration year
      * @param cvvCode card verification code
-     * 
+     *
      * @return result with all the response objects
-     * 
-     * @see Payment#create(java.lang.String, long, int, java.lang.String, int, int, java.lang.String) 
+     *
+     * @see Payment#create(java.lang.String, long, int, java.lang.String, int,
+     * int, java.lang.String)
      */
     ServiceResult createSimple(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
@@ -93,21 +99,24 @@ final class PaymentInstance {
 
     /**
      * Creates a payment request using the common parameters in a simple way.<p>
-     * 
-     * Please read official documentation for more detailed information about parameters.
-     * 
-     * @param orderId Optional, null is none. The order Id. 
+     *
+     * Please read official documentation for more detailed information about
+     * parameters.
+     *
+     * @param orderId Optional, null is none. The order Id.
      * @param amount Amount of the payment in cents
-     * @param currency used currency 
+     * @param currency used currency
      * @param cardNumber card number
      * @param expMonth expiration month
      * @param expYear expiration year
      * @param cvvCode card verification code
      * @param response callback handler to work with the response
-     * 
+     *
      * @return result with all the response objects
-     * 
-     * @see Payment#create(java.lang.String, long, int, java.lang.String, int, int, java.lang.String, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     *
+     * @see Payment#create(java.lang.String, long, int, java.lang.String, int,
+     * int, java.lang.String,
+     * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
     ServiceResult createSimple(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode, ResponseHandler response) {
         ServiceResult serviceResult = createSimple(orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode);
@@ -118,18 +127,21 @@ final class PaymentInstance {
     }
 
     /**
-     * Creates a payment request using the createPayment object <p>
-     * Please read official documentation for more detailed information about parameter content.
-     * 
-     * @param createPaymentRequest complex object with all the parameters for service call
+     * Creates a payment request using the createPayment object
+     * <p>
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param createPaymentRequest complex object with all the parameters for
+     * service call
      * @return result with all the response objects
-     * 
-     * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment) 
+     *
+     * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment)
      */
     ServiceResult create(CreatePayment createPaymentRequest) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
 
-        CreatePaymentResponse.CreatePaymentResult paymentResponse = api.createPayment(createPaymentRequest.getCommonRequest(), createPaymentRequest.getThreeDSRequest(), createPaymentRequest.getPaymentRequest(), createPaymentRequest.getOrderRequest(), createPaymentRequest.getCardRequest(), createPaymentRequest.getCustomerRequest(), createPaymentRequest.getTechRequest(), createPaymentRequest.getShoppingCartRequest());        
+        CreatePaymentResponse.CreatePaymentResult paymentResponse = api.createPayment(createPaymentRequest.getCommonRequest(), createPaymentRequest.getThreeDSRequest(), createPaymentRequest.getPaymentRequest(), createPaymentRequest.getOrderRequest(), createPaymentRequest.getCardRequest(), createPaymentRequest.getCustomerRequest(), createPaymentRequest.getTechRequest(), createPaymentRequest.getShoppingCartRequest());
 
         ServiceResult serviceResult = new ServiceResult(paymentResponse, SessionUtils.getHttpSessionId((BindingProvider) api));
 
@@ -137,14 +149,18 @@ final class PaymentInstance {
     }
 
     /**
-     * Creates a payment request using the createPayment object <p>
-     * Please read official documentation for more detailed information about parameter content.
-     * 
-     * @param createPaymentRequest complex object with all the parameters for service call
+     * Creates a payment request using the createPayment object
+     * <p>
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param createPaymentRequest complex object with all the parameters for
+     * service call
      * @param response callback handler to work with the response
      * @return result with all the response objects
-     * 
-     * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     *
+     * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment,
+     * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
     ServiceResult create(CreatePayment createPaymentRequest, ResponseHandler response) {
         ServiceResult serviceResult = create(createPaymentRequest);
@@ -155,15 +171,17 @@ final class PaymentInstance {
     }
 
     /**
-     * Creates a payment in the system after returning from ACS (payment 3DS) .<p>
-     * 
-     * Please read official documentation for more detailed information about parameters.
-     * 
+     * Creates a payment in the system after returning from ACS (payment 3DS)
+     * .<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameters.
+     *
      * @param paRes Response from ACS
      * @param MD Payment session information
      * @return result with all the response objects
-     * 
-     * @see Payment#create(java.lang.String, java.lang.String) 
+     *
+     * @see Payment#create(java.lang.String, java.lang.String)
      */
     ServiceResult create3DS(String paREs, String MD) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
@@ -190,16 +208,19 @@ final class PaymentInstance {
     }
 
     /**
-     * Creates a payment in the system after returning from ACS (payment 3DS) .<p>
-     * 
-     * Please read official documentation for more detailed information about parameters.
-     * 
+     * Creates a payment in the system after returning from ACS (payment 3DS)
+     * .<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameters.
+     *
      * @param paRes Response from ACS
      * @param MD Payment session information
      * @param response callback handler to work with the response
      * @return result with all the response objects
-     * 
-     * @see Payment#create(java.lang.String, java.lang.String, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     *
+     * @see Payment#create(java.lang.String, java.lang.String,
+     * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
     ServiceResult create3DS(String paREs, String MD, ResponseHandler response) {
         ServiceResult serviceResult = create3DS(paREs, MD);
@@ -210,14 +231,16 @@ final class PaymentInstance {
     }
 
     /**
-     * Get all the details of an existing transaction using the UUID of the transaction<p>
-     * 
-     * Please read official documentation for more detailed information about parameter content.
-     * 
+     * Get all the details of an existing transaction using the UUID of the
+     * transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
      * @param uuidTransaction unique identifier of the transaction
      * @return result with all the response objects
-     * 
-     * @see Payment#details(java.lang.String) 
+     *
+     * @see Payment#details(java.lang.String)
      */
     ServiceResult detailsSimple(String uuidTransaction) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
@@ -232,15 +255,18 @@ final class PaymentInstance {
     }
 
     /**
-     * Get all the details of an existing transaction using the UUID of the transaction<p>
-     * 
-     * Please read official documentation for more detailed information about parameter content.
-     * 
+     * Get all the details of an existing transaction using the UUID of the
+     * transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
      * @param uuidTransaction unique identifier of the transaction
      * @param response callback handler to work with the response
      * @return result with all the response objects
-     * 
-     * @see Payment#details(java.lang.String, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     *
+     * @see Payment#details(java.lang.String,
+     * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
     ServiceResult detailsSimple(String uuidTransaction, ResponseHandler response) {
         ServiceResult serviceResult = detailsSimple(uuidTransaction);
@@ -251,15 +277,18 @@ final class PaymentInstance {
     }
 
     /**
-     * Get all the details of an existing transaction using the three key field that identify a transaction uniquely<p>
-     * Please read official documentation for more detailed information about parameter content.
-     * 
+     * Get all the details of an existing transaction using the three key field
+     * that identify a transaction uniquely<p>
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
      * @param transactionId the transaction id number
      * @param creationDate the creation date. It only takes the day into account
-     * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
+     * @param sequenceNumber the sequence number in case o multiple payment.
+     * Always 1 in case of simple payment
      * @return result with all the response objects
-     * 
-     * @see Payment#details(java.lang.String, java.util.Date, int) 
+     *
+     * @see Payment#details(java.lang.String, java.util.Date, int)
      */
     ServiceResult detailsByFind(String transactionId, Date creationDate, int sequenceNumber) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
@@ -271,31 +300,31 @@ final class PaymentInstance {
 
         GetPaymentUuidResponse.LegacyTransactionKeyResult keyResult = api.getPaymentUuid(transactionKey);
 
-        GetPaymentDetailsResponse.GetPaymentDetailsResult detailsResponse;
+        ServiceResult serviceResult;
         if (keyResult.getPaymentResponse() != null && keyResult.getPaymentResponse().getTransactionUuid() != null) {
-            QueryRequest queryRequest = new QueryRequest();
-            queryRequest.setUuid(keyResult.getPaymentResponse().getTransactionUuid());
-            detailsResponse = api.getPaymentDetails(queryRequest);
+            serviceResult = detailsSimple(keyResult.getPaymentResponse().getTransactionUuid());
         } else {
-            return new ServiceResult(keyResult);
+            serviceResult = new ServiceResult(keyResult);
         }
-
-        ServiceResult serviceResult = new ServiceResult(detailsResponse);
 
         return serviceResult;
     }
 
     /**
-     * Get all the details of an existing transaction using the three key field that identify a transaction uniquely<p>
-     * Please read official documentation for more detailed information about parameter content.
-     * 
+     * Get all the details of an existing transaction using the three key field
+     * that identify a transaction uniquely<p>
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
      * @param transactionId the transaction id number
      * @param creationDate the creation date. It only takes the day into account
-     * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
+     * @param sequenceNumber the sequence number in case o multiple payment.
+     * Always 1 in case of simple payment
      * @param response callback handler to work with the response
      * @return result with all the response objects
-     * 
-     * @see Payment#details(java.lang.String, java.util.Date, int, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     *
+     * @see Payment#details(java.lang.String, java.util.Date, int,
+     * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
     ServiceResult detailsByFind(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
         ServiceResult serviceResult = detailsByFind(transactionId, creationDate, sequenceNumber);
@@ -304,7 +333,223 @@ final class PaymentInstance {
 
         return serviceResult;
     }
+
+    /**
+     * Cancel an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult cancelSimple(String uuidTransaction) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+
+        CancelPaymentResponse.CancelPaymentResult cancelResponse = api.cancelPayment(new CommonRequest(), queryRequest);
+
+        ServiceResult serviceResult = new ServiceResult(cancelResponse);
+
+        return serviceResult;
+    }
+
+    /**
+     * Cancel an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String,
+     * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
+     */
+    ServiceResult cancelSimple(String uuidTransaction, ResponseHandler response) {
+        ServiceResult serviceResult = cancelSimple(uuidTransaction);
+
+        handleResponse(response, serviceResult);
+
+        return serviceResult;
+    }
+
+    /**
+     * Cancel an existing transaction using the three key field that identify a
+     * transaction uniquely<p>
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param transactionId the transaction id number
+     * @param creationDate the creation date. It only takes the day into account
+     * @param sequenceNumber the sequence number in case o multiple payment.
+     * Always 1 in case of simple payment
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String, java.util.Date, int)
+     */
+    ServiceResult cancelByFind(String transactionId, Date creationDate, int sequenceNumber) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+
+        LegacyTransactionKeyRequest transactionKey = new LegacyTransactionKeyRequest();
+        transactionKey.setTransactionId(transactionId);
+        transactionKey.setCreationDate(BuilderUtils.date2XMLGregorianCalendar(creationDate));
+        transactionKey.setSequenceNumber(sequenceNumber);
+
+        GetPaymentUuidResponse.LegacyTransactionKeyResult keyResult = api.getPaymentUuid(transactionKey);
+
+        ServiceResult serviceResult;
+        if (keyResult.getPaymentResponse() != null && keyResult.getPaymentResponse().getTransactionUuid() != null) {
+            serviceResult = cancelSimple(keyResult.getPaymentResponse().getTransactionUuid());
+        } else {
+            serviceResult = new ServiceResult(keyResult);
+        }
+
+        return serviceResult;
+    }
+
+    /**
+     * Cancel an existing transaction using the three key field that identify a
+     * transaction uniquely<p>
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param transactionId the transaction id number
+     * @param creationDate the creation date. It only takes the day into account
+     * @param sequenceNumber the sequence number in case o multiple payment.
+     * Always 1 in case of simple payment
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String, java.util.Date, int,
+     * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
+     */
+    ServiceResult cancelByFind(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
+        ServiceResult serviceResult = cancelByFind(transactionId, creationDate, sequenceNumber);
+
+        handleResponse(response, serviceResult);
+
+        return serviceResult;
+    }
     
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param amount the new amount of the transaction
+     * 
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, long amount, int currency) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setAmount(amount);
+        paymentRequest.setCurrency(currency);
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param captureDate expected capture date
+     * 
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, Date captureDate) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setExpectedCaptureDate(BuilderUtils.date2XMLGregorianCalendar(captureDate));
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param amount the new amount of the transaction
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, long amount, int currency, ResponseHandler response) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setAmount(amount);
+        paymentRequest.setCurrency(currency);
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     *
+     * Please read official documentation for more detailed information about
+     * parameter content.
+     *
+     * @param uuidTransaction unique identifier of the transaction
+     * @param captureDate expected capture date
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     *
+     * @see Payment#details(java.lang.String)
+     */
+    ServiceResult updateSimple(String uuidTransaction, Date captureDate, ResponseHandler response) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+        
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setExpectedCaptureDate(BuilderUtils.date2XMLGregorianCalendar(captureDate));
+
+        UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
+
+        ServiceResult serviceResult = new ServiceResult(updateResponse);
+
+        return serviceResult;
+    }
+
     //TODO: not used for the moment
     ServiceResult details(String orderId) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();

@@ -197,5 +197,81 @@ public final class Payment {
     public static ServiceResult details(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
         return getInstance().detailsByFind(transactionId, creationDate, sequenceNumber, response);
     }
+    
+    /**
+     * Cancel an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @return result with all the response objects
+     */
+    public static ServiceResult cancel(String uuidTransaction) {
+        return getInstance().cancelSimple(uuidTransaction);
+    }
+    
+    /**
+     * Cancel an existing transaction using the three key field that identify a transaction uniquely<p>
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param transactionId the transaction id number
+     * @param creationDate the creation date. It only takes the day into account
+     * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
+     * @return result with all the response objects
+     */
+    public static ServiceResult cancel(String transactionId, Date creationDate, int sequenceNumber) {
+        return getInstance().cancelByFind(transactionId, creationDate, sequenceNumber);
+    }
+    
+    /**
+     * Cancel an existing transaction using the UUID of the transaction<p>
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     */
+    public static ServiceResult cancel(String uuidTransaction, ResponseHandler response) {
+        return getInstance().cancelSimple(uuidTransaction, response);
+    }
+    
+    /**
+     * Cancel an existing transaction using the three key field that identify a transaction uniquely<p>
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param transactionId the transaction id number
+     * @param creationDate the creation date. It only takes the day into account
+     * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     */
+    public static ServiceResult cancel(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
+        return getInstance().cancelByFind(transactionId, creationDate, sequenceNumber, response);
+    }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param amount the new amount for the transaction
+     * @return result with all the response objects
+     */
+    public static ServiceResult update(String uuidTransaction, long amount, int currency) {
+        return getInstance().updateSimple(uuidTransaction, amount, currency);
+    }
 
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param captureDate expected capture date
+     * @return result with all the response objects
+     */
+    public static ServiceResult update(String uuidTransaction, Date captureDate) {
+        return getInstance().updateSimple(uuidTransaction, captureDate);
+    }
 }
