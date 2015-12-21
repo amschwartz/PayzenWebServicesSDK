@@ -15,6 +15,7 @@
  */
 package com.profesorfalken.payzen.webservices.sdk;
 
+import com.lyra.vads.ws.v5.CancelPaymentResponse;
 import com.lyra.vads.ws.v5.CardRequest;
 import com.lyra.vads.ws.v5.CommonRequest;
 import com.lyra.vads.ws.v5.CreatePayment;
@@ -107,7 +108,7 @@ final class PaymentInstance {
      * 
      * @return result with all the response objects
      * 
-     * @see Payment#create(java.lang.String, long, int, java.lang.String, int, int, java.lang.String, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     * @see Payment#create(java.lang.String, long, int, java.lang.String, int, int, java.lang.String, com.profesorfalken.payzen.webservices.sdk.ResponseHandler) 
      */
     ServiceResult createSimple(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode, ResponseHandler response) {
         ServiceResult serviceResult = createSimple(orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode);
@@ -144,7 +145,7 @@ final class PaymentInstance {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      * 
-     * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment, com.profesorfalken.payzen.webservices.sdk.ResponseHandler) 
      */
     ServiceResult create(CreatePayment createPaymentRequest, ResponseHandler response) {
         ServiceResult serviceResult = create(createPaymentRequest);
@@ -199,7 +200,7 @@ final class PaymentInstance {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      * 
-     * @see Payment#create(java.lang.String, java.lang.String, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     * @see Payment#create(java.lang.String, java.lang.String, com.profesorfalken.payzen.webservices.sdk.ResponseHandler) 
      */
     ServiceResult create3DS(String paREs, String MD, ResponseHandler response) {
         ServiceResult serviceResult = create3DS(paREs, MD);
@@ -240,7 +241,7 @@ final class PaymentInstance {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      * 
-     * @see Payment#details(java.lang.String, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     * @see Payment#details(java.lang.String, com.profesorfalken.payzen.webservices.sdk.ResponseHandler) 
      */
     ServiceResult detailsSimple(String uuidTransaction, ResponseHandler response) {
         ServiceResult serviceResult = detailsSimple(uuidTransaction);
@@ -295,10 +296,106 @@ final class PaymentInstance {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      * 
-     * @see Payment#details(java.lang.String, java.util.Date, int, org.pfalken.payzen.webservices.sdk.ResponseHandler) 
+     * @see Payment#details(java.lang.String, java.util.Date, int, com.profesorfalken.payzen.webservices.sdk.ResponseHandler) 
      */
     ServiceResult detailsByFind(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
         ServiceResult serviceResult = detailsByFind(transactionId, creationDate, sequenceNumber);
+
+        handleResponse(response, serviceResult);
+
+        return serviceResult;
+    }
+    
+    /**
+     * Cancel an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @return result with all the response objects
+     * 
+     * @see Payment#details(java.lang.String) 
+     */
+    ServiceResult cancelSimple(String uuidTransaction) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setUuid(uuidTransaction);
+
+        CancelPaymentResponse.CancelPaymentResult cancelResponse = api.cancelPayment(new CommonRequest(), queryRequest);
+
+        ServiceResult serviceResult = new ServiceResult(cancelResponse);
+
+        return serviceResult;
+    }
+
+    /**
+     * Cancel an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     * 
+     * @see Payment#details(java.lang.String, com.profesorfalken.payzen.webservices.sdk.ResponseHandler) 
+     */
+    ServiceResult cancelSimple(String uuidTransaction, ResponseHandler response) {
+        ServiceResult serviceResult = cancelSimple(uuidTransaction);
+
+        handleResponse(response, serviceResult);
+
+        return serviceResult;
+    }
+
+    /**
+     * Cancel an existing transaction using the three key field that identify a transaction uniquely<p>
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param transactionId the transaction id number
+     * @param creationDate the creation date. It only takes the day into account
+     * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
+     * @return result with all the response objects
+     * 
+     * @see Payment#details(java.lang.String, java.util.Date, int) 
+     */
+    ServiceResult cancelByFind(String transactionId, Date creationDate, int sequenceNumber) {
+        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+
+        LegacyTransactionKeyRequest transactionKey = new LegacyTransactionKeyRequest();
+        transactionKey.setTransactionId(transactionId);
+        transactionKey.setCreationDate(BuilderUtils.date2XMLGregorianCalendar(creationDate));
+        transactionKey.setSequenceNumber(sequenceNumber);
+
+        GetPaymentUuidResponse.LegacyTransactionKeyResult keyResult = api.getPaymentUuid(transactionKey);
+
+        CancelPaymentResponse.CancelPaymentResult cancelResponse;
+        if (keyResult.getPaymentResponse() != null && keyResult.getPaymentResponse().getTransactionUuid() != null) {
+            QueryRequest queryRequest = new QueryRequest();
+            queryRequest.setUuid(keyResult.getPaymentResponse().getTransactionUuid());
+            cancelResponse = api.cancelPayment(new CommonRequest(), queryRequest);
+        } else {
+            return new ServiceResult(keyResult);
+        }
+
+        ServiceResult serviceResult = new ServiceResult(cancelResponse);
+
+        return serviceResult;
+    }
+
+    /**
+     * Cancel an existing transaction using the three key field that identify a transaction uniquely<p>
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param transactionId the transaction id number
+     * @param creationDate the creation date. It only takes the day into account
+     * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
+     * @param response callback handler to work with the response
+     * @return result with all the response objects
+     * 
+     * @see Payment#details(java.lang.String, java.util.Date, int, com.profesorfalken.payzen.webservices.sdk.ResponseHandler) 
+     */
+    ServiceResult cancelByFind(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
+        ServiceResult serviceResult = cancelByFind(transactionId, creationDate, sequenceNumber);
 
         handleResponse(response, serviceResult);
 

@@ -16,6 +16,7 @@
 package com.profesorfalken.payzen.webservices.sdk;
 
 import com.lyra.vads.ws.v5.AuthorizationResponse;
+import com.lyra.vads.ws.v5.CancelPaymentResponse;
 import com.lyra.vads.ws.v5.CaptureResponse;
 import com.lyra.vads.ws.v5.CardResponse;
 import com.lyra.vads.ws.v5.CommonResponse;
@@ -88,6 +89,10 @@ public final class ServiceResult {
         //shoppingCartResponse = detailsPaymentResult.getShoppingCartResponse();
         subscriptionResponse = detailsPaymentResult.getSubscriptionResponse();
         threeDSResponse = detailsPaymentResult.getThreeDSResponse();
+    }
+    
+    public ServiceResult(CancelPaymentResponse.CancelPaymentResult cancelResult) {
+        commonResponse = cancelResult.getCommonResponse();
     }
 
     public ServiceResult(GetPaymentUuidResponse.LegacyTransactionKeyResult getPaymentUuidResult) {
