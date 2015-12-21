@@ -449,13 +449,14 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult updateSimple(String uuidTransaction, long amount) {
+    ServiceResult updateSimple(String uuidTransaction, long amount, int currency) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
         
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setAmount(amount);
+        paymentRequest.setCurrency(currency);
 
         UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
 
@@ -505,13 +506,14 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult updateSimple(String uuidTransaction, long amount, ResponseHandler response) {
+    ServiceResult updateSimple(String uuidTransaction, long amount, int currency, ResponseHandler response) {
         PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
         
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setAmount(amount);
+        paymentRequest.setCurrency(currency);
 
         UpdatePaymentResponse.UpdatePaymentResult updateResponse = api.updatePayment(new CommonRequest(), queryRequest, paymentRequest);
 

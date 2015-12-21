@@ -258,8 +258,8 @@ public final class Payment {
      * @param amount the new amount for the transaction
      * @return result with all the response objects
      */
-    public static ServiceResult cancel(String uuidTransaction, long amount) {
-        return getInstance().updateSimple(uuidTransaction, amount);
+    public static ServiceResult update(String uuidTransaction, long amount, int currency) {
+        return getInstance().updateSimple(uuidTransaction, amount, currency);
     }
 
     /**
@@ -271,7 +271,7 @@ public final class Payment {
      * @param captureDate expected capture date
      * @return result with all the response objects
      */
-    public static ServiceResult cancel(String uuidTransaction, Date captureDate) {
+    public static ServiceResult update(String uuidTransaction, Date captureDate) {
         return getInstance().updateSimple(uuidTransaction, captureDate);
     }
 }
