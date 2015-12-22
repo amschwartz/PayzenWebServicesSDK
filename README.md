@@ -1,3 +1,6 @@
+![](https://img.shields.io/maven-central/v/com.profesorfalken/PayzenWebServicesSDK.svg)
+![](https://img.shields.io/github/license/profesorfalken/PayzenWebServicesSDK.svg)
+
 # Payzen SDK SOAP Web Services v5 in Java #
 
 This SDK simplifies the use of Web Services SOAP Payzen v5 in order to make payment operations. 
