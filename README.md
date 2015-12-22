@@ -128,7 +128,7 @@ Really, it is that easy.
 ## How to build the library ##
 
 
-- Install maven
+- Install Maven: https://maven.apache.org/install.html
 
 - Download and import the project into your IDE or simply clone it from Git.
 
