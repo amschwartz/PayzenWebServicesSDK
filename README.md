@@ -3,17 +3,23 @@
 This SDK simplifies the use of Web Services SOAP Payzen v5 in order to make payment operations. 
 
 ## Basic Usage ##
-To use this SDK in your Java project you can download the last version here:
+To use this SDK in your Java project:
 
-http://profesorfalken.github.io/lib/PayzenWebServicesSDK-0.1.1.jar
+If you use Maven or other software project management tool, you will found the dependency here:
 
-The only dependencies are:
+http://mvnrepository.com/artifact/com.profesorfalken/PayzenWebServicesSDK/0.2
+
+Instead, you can download manually the last version here:
+
+http://search.maven.org/remotecontent?filepath=com/profesorfalken/PayzenWebServicesSDK/0.2/PayzenWebServicesSDK-0.2.jar
+
+In this last case, you have to add manually the dependencies:
 
 - *commons-codec-1.10.jar*
 - *commons-lang-2.6.jar*
 - *slf4j-api-1.7.12.jar*
 
-Once downloaded all the JAR files and placed in the classpath of your application, it is necessary to set up the config file.
+Once all the dependencies of application are resolved, it is necessary to set up the config file.
 
 In order to do that you have to create a resource file called *payzen-config.properties* into your classpath and set the following configuration params:
 
@@ -35,7 +41,7 @@ Once the configuration is set up, use the web services is as simple as doing:
                 (result) -> "Payment Done"
     );
  
-Really, is that easy.
+Really, it is that easy.
 
 
 
@@ -124,12 +130,8 @@ Really, is that easy.
 
 - Install maven
 
-
 - Download and import the project into your IDE or simply clone it from Git.
 
-- First time run from root directory: *mvn -Pgenerate-ws-stubs install*. This will generate all the web service stubs.
+- First time run from root directory: *mvn -Pgenerate-ws-stubs install*. This will generate/update all the web service stubs.
 
-- From that time, it is enough to execute *mvn install* to regenerate the library.
-
-- If the tests fail because the configuration data is not right you can skip the tests using *mvn install -Dmaven.test.skip=true*
-
+- From that time, it is enough to execute *mvn install* each time to regenerate the library.
