@@ -8,7 +8,7 @@ This SDK simplifies the use of Web Services SOAP Payzen v5 in order to make paym
 ## Basic Usage ##
 To use this SDK in your Java project:
 
-If you use Maven or other software project management tool, you will found the dependency here:
+If you use Maven or other software project management tool, you will find the dependency here:
 
 http://mvnrepository.com/artifact/com.profesorfalken/PayzenWebServicesSDK/0.2
 
