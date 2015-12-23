@@ -24,6 +24,7 @@ import javax.xml.ws.Service;
 import com.profesorfalken.payzen.webservices.sdk.handler.soap.HeaderHandlerResolver;
 import com.profesorfalken.payzen.webservices.sdk.util.Config;
 import com.profesorfalken.payzen.webservices.sdk.util.PayzenHostnameVerifier;
+import java.util.Map;
 
 /**
  * Encapsulates the client WS to call Payment operations
@@ -34,14 +35,15 @@ public class ClientV5 {
 
     private final PaymentAPI port;
 
-    public ClientV5() {
+    public ClientV5(Map<String, String> config) {
         //Adds hostnameverifier to check domain/certificate
         HttpsURLConnection.setDefaultHostnameVerifier(new PayzenHostnameVerifier());
         
         //Read client properties - payzen-config.properties
-        String shopId = Config.getConfig().getProperty("shopId");
-        String mode = Config.getConfig().getProperty("mode");
-        String endpointHost = Config.getConfig().getProperty("endpointHost");        
+        String shopId = (config != null && config.get("shopId") != null) ? config.get("shopId") : Config.getConfig().getProperty("shopId");
+        String shopKey = (config != null && config.get("shopKey") != null) ? config.get("shopKey") : Config.getConfig().getProperty("shopKey");
+        String mode = (config != null && config.get("mode") != null) ? config.get("mode") : Config.getConfig().getProperty("mode");
+        String endpointHost = (config != null && config.get("endpointHost") != null) ? config.get("endpointHost") : Config.getConfig().getProperty("endpointHost");
         
         //Initialises port
         String wsdlURLStr = "https://" + endpointHost + "/vads-ws/v5?wsdl";
@@ -50,7 +52,7 @@ public class ClientV5 {
             wsdlURL = new URL(wsdlURLStr);
             QName qname = new QName("http://v5.ws.vads.lyra.com/", "v5");
             Service service = Service.create(wsdlURL, qname);
-            service.setHandlerResolver(new HeaderHandlerResolver(shopId, mode));
+            service.setHandlerResolver(new HeaderHandlerResolver(shopId, shopKey, mode));
             port = service.getPort(PaymentAPI.class);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e.getMessage(), e);

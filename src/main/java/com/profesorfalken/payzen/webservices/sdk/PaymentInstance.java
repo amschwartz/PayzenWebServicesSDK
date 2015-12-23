@@ -38,6 +38,7 @@ import com.profesorfalken.payzen.webservices.sdk.client.ClientV5;
 import com.profesorfalken.payzen.webservices.sdk.util.BuilderUtils;
 import com.profesorfalken.payzen.webservices.sdk.util.RequestUtils;
 import com.profesorfalken.payzen.webservices.sdk.util.SessionUtils;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,8 +74,8 @@ final class PaymentInstance {
      * @see Payment#create(java.lang.String, long, int, java.lang.String, int,
      * int, java.lang.String)
      */
-    ServiceResult createSimple(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult createSimple(Map<String, String> config, String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
 
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.setOrderId(orderId);
@@ -118,8 +119,8 @@ final class PaymentInstance {
      * int, java.lang.String,
      * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
-    ServiceResult createSimple(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode, ResponseHandler response) {
-        ServiceResult serviceResult = createSimple(orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode);
+    ServiceResult createSimple(Map<String, String> config, String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode, ResponseHandler response) {
+        ServiceResult serviceResult = createSimple(config, orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode);
 
         handleResponse(response, serviceResult);
 
@@ -138,8 +139,8 @@ final class PaymentInstance {
      *
      * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment)
      */
-    ServiceResult create(CreatePayment createPaymentRequest) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult create(Map<String, String> config, CreatePayment createPaymentRequest) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
 
         CreatePaymentResponse.CreatePaymentResult paymentResponse = api.createPayment(createPaymentRequest.getCommonRequest(), createPaymentRequest.getThreeDSRequest(), createPaymentRequest.getPaymentRequest(), createPaymentRequest.getOrderRequest(), createPaymentRequest.getCardRequest(), createPaymentRequest.getCustomerRequest(), createPaymentRequest.getTechRequest(), createPaymentRequest.getShoppingCartRequest());
 
@@ -162,8 +163,8 @@ final class PaymentInstance {
      * @see Payment#create(com.lyra.vads.ws.v5.CreatePayment,
      * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
-    ServiceResult create(CreatePayment createPaymentRequest, ResponseHandler response) {
-        ServiceResult serviceResult = create(createPaymentRequest);
+    ServiceResult create(Map<String, String> config, CreatePayment createPaymentRequest, ResponseHandler response) {
+        ServiceResult serviceResult = create(config, createPaymentRequest);
 
         handleResponse(response, serviceResult);
 
@@ -183,8 +184,8 @@ final class PaymentInstance {
      *
      * @see Payment#create(java.lang.String, java.lang.String)
      */
-    ServiceResult create3DS(String paREs, String MD) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult create3DS(Map<String, String> config, String paREs, String MD) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
 
         ThreeDSRequest threeDSRequest = new ThreeDSRequest();
         threeDSRequest.setMode(ThreeDSMode.ENABLED_FINALIZE);
@@ -222,8 +223,8 @@ final class PaymentInstance {
      * @see Payment#create(java.lang.String, java.lang.String,
      * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
-    ServiceResult create3DS(String paREs, String MD, ResponseHandler response) {
-        ServiceResult serviceResult = create3DS(paREs, MD);
+    ServiceResult create3DS(Map<String, String> config, String paREs, String MD, ResponseHandler response) {
+        ServiceResult serviceResult = create3DS(config, paREs, MD);
 
         handleResponse(response, serviceResult);
 
@@ -242,8 +243,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult detailsSimple(String uuidTransaction) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult detailsSimple(Map<String, String> config, String uuidTransaction) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
 
@@ -268,8 +269,8 @@ final class PaymentInstance {
      * @see Payment#details(java.lang.String,
      * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
-    ServiceResult detailsSimple(String uuidTransaction, ResponseHandler response) {
-        ServiceResult serviceResult = detailsSimple(uuidTransaction);
+    ServiceResult detailsSimple(Map<String, String> config, String uuidTransaction, ResponseHandler response) {
+        ServiceResult serviceResult = detailsSimple(config, uuidTransaction);
 
         handleResponse(response, serviceResult);
 
@@ -290,8 +291,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String, java.util.Date, int)
      */
-    ServiceResult detailsByFind(String transactionId, Date creationDate, int sequenceNumber) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult detailsByFind(Map<String, String> config, String transactionId, Date creationDate, int sequenceNumber) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
 
         LegacyTransactionKeyRequest transactionKey = new LegacyTransactionKeyRequest();
         transactionKey.setTransactionId(transactionId);
@@ -302,7 +303,7 @@ final class PaymentInstance {
 
         ServiceResult serviceResult;
         if (keyResult.getPaymentResponse() != null && keyResult.getPaymentResponse().getTransactionUuid() != null) {
-            serviceResult = detailsSimple(keyResult.getPaymentResponse().getTransactionUuid());
+            serviceResult = detailsSimple(config, keyResult.getPaymentResponse().getTransactionUuid());
         } else {
             serviceResult = new ServiceResult(keyResult);
         }
@@ -326,8 +327,8 @@ final class PaymentInstance {
      * @see Payment#details(java.lang.String, java.util.Date, int,
      * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
-    ServiceResult detailsByFind(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
-        ServiceResult serviceResult = detailsByFind(transactionId, creationDate, sequenceNumber);
+    ServiceResult detailsByFind(Map<String, String> config, String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
+        ServiceResult serviceResult = detailsByFind(config, transactionId, creationDate, sequenceNumber);
 
         handleResponse(response, serviceResult);
 
@@ -345,8 +346,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult cancelSimple(String uuidTransaction) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult cancelSimple(Map<String, String> config, String uuidTransaction) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
 
@@ -370,8 +371,8 @@ final class PaymentInstance {
      * @see Payment#details(java.lang.String,
      * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
-    ServiceResult cancelSimple(String uuidTransaction, ResponseHandler response) {
-        ServiceResult serviceResult = cancelSimple(uuidTransaction);
+    ServiceResult cancelSimple(Map<String, String> config, String uuidTransaction, ResponseHandler response) {
+        ServiceResult serviceResult = cancelSimple(config, uuidTransaction);
 
         handleResponse(response, serviceResult);
 
@@ -392,8 +393,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String, java.util.Date, int)
      */
-    ServiceResult cancelByFind(String transactionId, Date creationDate, int sequenceNumber) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult cancelByFind(Map<String, String> config, String transactionId, Date creationDate, int sequenceNumber) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
 
         LegacyTransactionKeyRequest transactionKey = new LegacyTransactionKeyRequest();
         transactionKey.setTransactionId(transactionId);
@@ -404,7 +405,7 @@ final class PaymentInstance {
 
         ServiceResult serviceResult;
         if (keyResult.getPaymentResponse() != null && keyResult.getPaymentResponse().getTransactionUuid() != null) {
-            serviceResult = cancelSimple(keyResult.getPaymentResponse().getTransactionUuid());
+            serviceResult = cancelSimple(config, keyResult.getPaymentResponse().getTransactionUuid());
         } else {
             serviceResult = new ServiceResult(keyResult);
         }
@@ -428,8 +429,8 @@ final class PaymentInstance {
      * @see Payment#details(java.lang.String, java.util.Date, int,
      * com.profesorfalken.payzen.webservices.sdk.ResponseHandler)
      */
-    ServiceResult cancelByFind(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
-        ServiceResult serviceResult = cancelByFind(transactionId, creationDate, sequenceNumber);
+    ServiceResult cancelByFind(Map<String, String> config, String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
+        ServiceResult serviceResult = cancelByFind(config, transactionId, creationDate, sequenceNumber);
 
         handleResponse(response, serviceResult);
 
@@ -449,8 +450,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult updateSimple(String uuidTransaction, long amount, int currency) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult updateSimple(Map<String, String> config, String uuidTransaction, long amount, int currency) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
         
@@ -478,8 +479,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult updateSimple(String uuidTransaction, Date captureDate) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult updateSimple(Map<String, String> config, String uuidTransaction, Date captureDate) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
         
@@ -506,8 +507,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult updateSimple(String uuidTransaction, long amount, int currency, ResponseHandler response) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult updateSimple(Map<String, String> config, String uuidTransaction, long amount, int currency, ResponseHandler response) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
         
@@ -535,8 +536,8 @@ final class PaymentInstance {
      *
      * @see Payment#details(java.lang.String)
      */
-    ServiceResult updateSimple(String uuidTransaction, Date captureDate, ResponseHandler response) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult updateSimple(Map<String, String> config, String uuidTransaction, Date captureDate, ResponseHandler response) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setUuid(uuidTransaction);
         
@@ -551,8 +552,8 @@ final class PaymentInstance {
     }
 
     //TODO: not used for the moment
-    ServiceResult details(String orderId) {
-        PaymentAPI api = new ClientV5().getPaymentAPIImplPort();
+    ServiceResult details(Map<String, String> config, String orderId) {
+        PaymentAPI api = new ClientV5(config).getPaymentAPIImplPort();
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setOrderId(orderId);
 
@@ -564,8 +565,8 @@ final class PaymentInstance {
     }
 
     //TODO: not used for the moment
-    ServiceResult details(String orderId, ResponseHandler response) {
-        ServiceResult serviceResult = details(orderId);
+    ServiceResult details(Map<String, String> config, String orderId, ResponseHandler response) {
+        ServiceResult serviceResult = details(config, orderId);
 
         handleResponse(response, serviceResult);
 

@@ -29,6 +29,8 @@ import com.profesorfalken.payzen.webservices.sdk.builder.request.OrderRequestBui
 import com.profesorfalken.payzen.webservices.sdk.builder.request.PaymentRequestBuilder;
 import com.profesorfalken.payzen.webservices.sdk.handler.response.LogResponseHandler;
 import com.profesorfalken.payzen.webservices.sdk.util.Config;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +89,41 @@ public class PaymentTest {
         } else {
             logger.info("Config not set");
         }
+
+        logger.info("End Test create");
+    }
+
+    /**
+     * Test of create method, of class Payment.
+     */
+    @Test
+    public void testCreateWithConfig() {
+        logger.info("Test create simple");
+
+        Map<String, String> config = new HashMap<String, String>();
+        config.put("shopId", "91335531");
+        config.put("shopKey", "8627912856153542");
+        config.put("mode", "TEST");
+        config.put("endpointHost", "payzen-inte01.lyra-labs.fr");
+
+        ServiceResult result = create("TestTRS",
+                100,
+                978,
+                "4970100000000003",
+                12,
+                2017,
+                "123",
+                new LogAndCheckResponseHandler(),
+                config
+        );
+
+        String trsUuid = (result != null && result.getPaymentResponse() != null && result.getPaymentResponse().getTransactionUuid() != null)
+                ? result.getPaymentResponse().getTransactionUuid() : null;
+
+        Assert.assertNotNull("Not UUID generated", trsUuid);
+
+        //Verify transaction
+        details(trsUuid, new LogAndCheckResponseHandler(), config);
 
         logger.info("End Test create");
     }
@@ -269,7 +306,7 @@ public class PaymentTest {
             responseCode = result.getCommonResponse().getResponseCode();
             Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
 
-            Assert.assertTrue("Transaction is not correctly cancelled.", 
+            Assert.assertTrue("Transaction is not correctly cancelled.",
                     "CANCELLED".equals(result.getCommonResponse().getTransactionStatusLabel()));
 
         } else {
@@ -278,7 +315,7 @@ public class PaymentTest {
 
         logger.info("End Test cancel simple");
     }
-    
+
     /**
      * Test of update method
      */
@@ -311,7 +348,7 @@ public class PaymentTest {
             responseCode = result.getCommonResponse().getResponseCode();
             Assert.assertTrue("Cannot get details. Error code: " + responseCode, responseCode == 0);
 
-            Assert.assertTrue("Transaction was correctly modified.", 
+            Assert.assertTrue("Transaction was correctly modified.",
                     (result.getPaymentResponse().getAmount() == 99));
         } else {
             logger.info("Config not set");

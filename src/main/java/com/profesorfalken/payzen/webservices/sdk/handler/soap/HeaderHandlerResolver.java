@@ -29,10 +29,12 @@ import javax.xml.ws.handler.PortInfo;
 public class HeaderHandlerResolver implements HandlerResolver {
 
     private final String shopId;
+    private final String shopKey;
     private final String mode;
 
-    public HeaderHandlerResolver(String shopId, String mode) {
+    public HeaderHandlerResolver(String shopId, String shopKey, String mode) {
         this.shopId = shopId;
+        this.shopKey = shopKey;
         this.mode = mode;
     }
 
@@ -46,7 +48,7 @@ public class HeaderHandlerResolver implements HandlerResolver {
     public List<Handler> getHandlerChain(PortInfo portInfo) {
         List<Handler> handlerChain = new ArrayList<Handler>();
 
-        HeaderHandler hh = new HeaderHandler(shopId, mode);
+        HeaderHandler hh = new HeaderHandler(shopId, shopKey, mode);
 
         handlerChain.add(hh);
 

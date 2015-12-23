@@ -36,7 +36,6 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.apache.commons.codec.binary.Base64;
-import com.profesorfalken.payzen.webservices.sdk.util.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +49,14 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
     private static final Logger logger = LoggerFactory.getLogger(HeaderHandler.class);
     
     private final String shopId;
+    private final String shopKey;
     private final String mode;
 
     private static final String NAMESPACE = "http://v5.ws.vads.lyra.com/Header/";
 
-    public HeaderHandler(String shopId, String mode) {
+    public HeaderHandler(String shopId, String shopKey, String mode) {
         this.shopId = shopId;
+        this.shopKey = shopKey;
         this.mode = mode;
     }
 
@@ -103,7 +104,6 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
                 // Authentication token
                 String tokenString = requestId + nowAsISO;
-                String shopKey = Config.getConfig().getProperty("shopKey");
                 addHeaderField(header, "authToken", sign(tokenString, shopKey));
 
             } catch (SOAPException e) {

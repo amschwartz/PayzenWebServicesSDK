@@ -17,6 +17,7 @@ package com.profesorfalken.payzen.webservices.sdk;
 
 import com.lyra.vads.ws.v5.CreatePayment;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Allows to perform payment related operations using the Payzen API based in 
@@ -38,7 +39,7 @@ import java.util.Date;
  * @author Javier Garcia Alonso
  */
 public final class Payment {
-
+    
     // Hide constructor
     private Payment() {
     }
@@ -73,8 +74,8 @@ public final class Payment {
      * @param cvvCode card verification code
      * @return result with all the response objects
      */
-    public static ServiceResult create(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode) {
-        return getInstance().createSimple(orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode);
+    public static ServiceResult create(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode, Map<String, String> ... config) {
+        return getInstance().createSimple((config.length>0)?config[0]:null, orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode);
     }
     
     /**
@@ -92,8 +93,8 @@ public final class Payment {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      */
-    public static ServiceResult create(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode, ResponseHandler response) {
-        return getInstance().createSimple(orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode, response);
+    public static ServiceResult create(String orderId, long amount, int currency, String cardNumber, int expMonth, int expYear, String cvvCode, ResponseHandler response, Map<String, String> ... config) {
+        return getInstance().createSimple((config.length>0)?config[0]:null, orderId, amount, currency, cardNumber, expMonth, expYear, cvvCode, response);
     }
     
     /**
@@ -103,8 +104,8 @@ public final class Payment {
      * @param createPaymentRequest complex object with all the parameters for service call
      * @return result with all the response objects
      */
-    public static ServiceResult create(CreatePayment createPaymentRequest) {
-        return getInstance().create(createPaymentRequest); 
+    public static ServiceResult create(CreatePayment createPaymentRequest, Map<String, String> ... config) {
+        return getInstance().create((config.length>0)?config[0]:null, createPaymentRequest); 
     }
     
     /**
@@ -116,8 +117,8 @@ public final class Payment {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      */
-    public static ServiceResult create(CreatePayment createPaymentRequest, ResponseHandler response) {
-        return getInstance().create(createPaymentRequest, response); 
+    public static ServiceResult create(CreatePayment createPaymentRequest, ResponseHandler response, Map<String, String> ... config) {
+        return getInstance().create((config.length>0)?config[0]:null, createPaymentRequest, response); 
     }
     
     /**
@@ -129,8 +130,8 @@ public final class Payment {
      * @param MD Payment session information
      * @return result with all the response objects
      */
-    public static ServiceResult create(String paRes, String MD) {
-        return getInstance().create3DS(paRes, MD);
+    public static ServiceResult create(String paRes, String MD, Map<String, String> ... config) {
+        return getInstance().create3DS((config.length>0)?config[0]:null, paRes, MD);
     }
     
     /**
@@ -143,8 +144,8 @@ public final class Payment {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      */
-    public static ServiceResult create(String paRes, String MD, ResponseHandler response) {
-        return getInstance().create3DS(paRes, MD, response);
+    public static ServiceResult create(String paRes, String MD, ResponseHandler response, Map<String, String> ... config) {
+        return getInstance().create3DS((config.length>0)?config[0]:null, paRes, MD, response);
     }
     
     /**
@@ -155,8 +156,8 @@ public final class Payment {
      * @param uuidTransaction unique identifier of the transaction
      * @return result with all the response objects
      */
-    public static ServiceResult details(String uuidTransaction) {
-        return getInstance().detailsSimple(uuidTransaction);
+    public static ServiceResult details(String uuidTransaction, Map<String, String> ... config) {
+        return getInstance().detailsSimple((config.length>0)?config[0]:null, uuidTransaction);
     }
     
     /**
@@ -168,8 +169,8 @@ public final class Payment {
      * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
      * @return result with all the response objects
      */
-    public static ServiceResult details(String transactionId, Date creationDate, int sequenceNumber) {
-        return getInstance().detailsByFind(transactionId, creationDate, sequenceNumber);
+    public static ServiceResult details(String transactionId, Date creationDate, int sequenceNumber, Map<String, String> ... config) {
+        return getInstance().detailsByFind((config.length>0)?config[0]:null, transactionId, creationDate, sequenceNumber);
     }
     
     /**
@@ -180,8 +181,8 @@ public final class Payment {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      */
-    public static ServiceResult details(String uuidTransaction, ResponseHandler response) {
-        return getInstance().detailsSimple(uuidTransaction, response);
+    public static ServiceResult details(String uuidTransaction, ResponseHandler response, Map<String, String> ... config) {
+        return getInstance().detailsSimple((config.length>0)?config[0]:null, uuidTransaction, response);
     }
     
     /**
@@ -194,8 +195,8 @@ public final class Payment {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      */
-    public static ServiceResult details(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
-        return getInstance().detailsByFind(transactionId, creationDate, sequenceNumber, response);
+    public static ServiceResult details(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response, Map<String, String> ... config) {
+        return getInstance().detailsByFind((config.length>0)?config[0]:null, transactionId, creationDate, sequenceNumber, response);
     }
     
     /**
@@ -206,8 +207,8 @@ public final class Payment {
      * @param uuidTransaction unique identifier of the transaction
      * @return result with all the response objects
      */
-    public static ServiceResult cancel(String uuidTransaction) {
-        return getInstance().cancelSimple(uuidTransaction);
+    public static ServiceResult cancel(String uuidTransaction, Map<String, String> ... config) {
+        return getInstance().cancelSimple((config.length>0)?config[0]:null, uuidTransaction);
     }
     
     /**
@@ -219,8 +220,8 @@ public final class Payment {
      * @param sequenceNumber the sequence number in case o multiple payment. Always 1 in case of simple payment
      * @return result with all the response objects
      */
-    public static ServiceResult cancel(String transactionId, Date creationDate, int sequenceNumber) {
-        return getInstance().cancelByFind(transactionId, creationDate, sequenceNumber);
+    public static ServiceResult cancel(String transactionId, Date creationDate, int sequenceNumber, Map<String, String> ... config) {
+        return getInstance().cancelByFind((config.length>0)?config[0]:null, transactionId, creationDate, sequenceNumber);
     }
     
     /**
@@ -231,8 +232,8 @@ public final class Payment {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      */
-    public static ServiceResult cancel(String uuidTransaction, ResponseHandler response) {
-        return getInstance().cancelSimple(uuidTransaction, response);
+    public static ServiceResult cancel(String uuidTransaction, ResponseHandler response, Map<String, String> ... config) {
+        return getInstance().cancelSimple((config.length>0)?config[0]:null, uuidTransaction, response);
     }
     
     /**
@@ -245,8 +246,8 @@ public final class Payment {
      * @param response callback handler to work with the response
      * @return result with all the response objects
      */
-    public static ServiceResult cancel(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response) {
-        return getInstance().cancelByFind(transactionId, creationDate, sequenceNumber, response);
+    public static ServiceResult cancel(String transactionId, Date creationDate, int sequenceNumber, ResponseHandler response, Map<String, String> ... config) {
+        return getInstance().cancelByFind((config.length>0)?config[0]:null, transactionId, creationDate, sequenceNumber, response);
     }
     
     /**
@@ -258,8 +259,8 @@ public final class Payment {
      * @param amount the new amount for the transaction
      * @return result with all the response objects
      */
-    public static ServiceResult update(String uuidTransaction, long amount, int currency) {
-        return getInstance().updateSimple(uuidTransaction, amount, currency);
+    public static ServiceResult update(String uuidTransaction, long amount, int currency, Map<String, String> ... config) {
+        return getInstance().updateSimple((config.length>0)?config[0]:null, uuidTransaction, amount, currency);
     }
 
     /**
@@ -271,7 +272,7 @@ public final class Payment {
      * @param captureDate expected capture date
      * @return result with all the response objects
      */
-    public static ServiceResult update(String uuidTransaction, Date captureDate) {
-        return getInstance().updateSimple(uuidTransaction, captureDate);
+    public static ServiceResult update(String uuidTransaction, Date captureDate, Map<String, String> ... config) {
+        return getInstance().updateSimple((config.length>0)?config[0]:null, uuidTransaction, captureDate);
     }
 }
