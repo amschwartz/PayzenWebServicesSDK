@@ -100,30 +100,34 @@ public class PaymentTest {
     public void testCreateWithConfig() {
         logger.info("Test create simple");
 
-        Map<String, String> config = new HashMap<String, String>();
-        config.put("shopId", "91335531");
-        config.put("shopKey", "8627912856153542");
-        config.put("mode", "TEST");
-        config.put("endpointHost", "payzen-inte01.lyra-labs.fr");
+        if (checkConfig()) {
+            Map<String, String> config = new HashMap<String, String>();
+            config.put("shopId", "91335531");
+            config.put("shopKey", "8627912856153542");
+            config.put("mode", "TEST");
+            config.put("endpointHost", "payzen-inte01.lyra-labs.fr");
 
-        ServiceResult result = create("TestTRS",
-                100,
-                978,
-                "4970100000000003",
-                12,
-                2017,
-                "123",
-                new LogAndCheckResponseHandler(),
-                config
-        );
+            ServiceResult result = create("TestTRS",
+                    100,
+                    978,
+                    "4970100000000003",
+                    12,
+                    2017,
+                    "123",
+                    new LogAndCheckResponseHandler(),
+                    config
+            );
 
-        String trsUuid = (result != null && result.getPaymentResponse() != null && result.getPaymentResponse().getTransactionUuid() != null)
-                ? result.getPaymentResponse().getTransactionUuid() : null;
+            String trsUuid = (result != null && result.getPaymentResponse() != null && result.getPaymentResponse().getTransactionUuid() != null)
+                    ? result.getPaymentResponse().getTransactionUuid() : null;
 
-        Assert.assertNotNull("Not UUID generated", trsUuid);
+            Assert.assertNotNull("Not UUID generated", trsUuid);
 
-        //Verify transaction
-        details(trsUuid, new LogAndCheckResponseHandler(), config);
+            //Verify transaction
+            details(trsUuid, new LogAndCheckResponseHandler(), config);
+        } else {
+            logger.info("Config not set");
+        }
 
         logger.info("End Test create");
     }
