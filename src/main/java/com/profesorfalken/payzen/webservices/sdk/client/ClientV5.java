@@ -44,9 +44,15 @@ public class ClientV5 {
         String shopKey = (config != null && config.get("shopKey") != null) ? config.get("shopKey") : Config.getConfig().getProperty("shopKey");
         String mode = (config != null && config.get("mode") != null) ? config.get("mode") : Config.getConfig().getProperty("mode");
         String endpointHost = (config != null && config.get("endpointHost") != null) ? config.get("endpointHost") : Config.getConfig().getProperty("endpointHost");
+        String secureConnection = (config != null && config.get("secureConnection") != null) ? config.get("secureConnection") : Config.getConfig().getProperty("secureConnection");
+        
+        String protocol = "https://";
+        if (!("true".equalsIgnoreCase(secureConnection))) {
+            protocol = "http://";
+        }
         
         //Initialises port
-        String wsdlURLStr = "https://" + endpointHost + "/vads-ws/v5?wsdl";
+        String wsdlURLStr = protocol + endpointHost + "/vads-ws/v5?wsdl";
         URL wsdlURL;
         try {
             wsdlURL = new URL(wsdlURLStr);
