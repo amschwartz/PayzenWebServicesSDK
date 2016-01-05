@@ -23,12 +23,14 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import com.profesorfalken.payzen.webservices.sdk.handler.soap.HeaderHandlerResolver;
 import com.profesorfalken.payzen.webservices.sdk.util.Config;
+import com.profesorfalken.payzen.webservices.sdk.util.NullHostnameVerifier;
 import com.profesorfalken.payzen.webservices.sdk.util.PayzenHostnameVerifier;
 import java.util.Map;
+import javax.net.ssl.HostnameVerifier;
 
 /**
  * Encapsulates the client WS to call Payment operations
- * 
+ *
  * @author Javier Garcia Alonso
  */
 public class ClientV5 {
@@ -36,21 +38,24 @@ public class ClientV5 {
     private final PaymentAPI port;
 
     public ClientV5(Map<String, String> config) {
-        //Adds hostnameverifier to check domain/certificate
-        HttpsURLConnection.setDefaultHostnameVerifier(new PayzenHostnameVerifier());
-        
         //Read client properties - payzen-config.properties
         String shopId = (config != null && config.get("shopId") != null) ? config.get("shopId") : Config.getConfig().getProperty("shopId");
         String shopKey = (config != null && config.get("shopKey") != null) ? config.get("shopKey") : Config.getConfig().getProperty("shopKey");
         String mode = (config != null && config.get("mode") != null) ? config.get("mode") : Config.getConfig().getProperty("mode");
         String endpointHost = (config != null && config.get("endpointHost") != null) ? config.get("endpointHost") : Config.getConfig().getProperty("endpointHost");
         String secureConnection = (config != null && config.get("secureConnection") != null) ? config.get("secureConnection") : Config.getConfig().getProperty("secureConnection");
-        
+        String disableHostnameVerifier = (config != null && config.get("disableHostnameVerifier") != null) ? config.get("disableHostnameVerifier") : Config.getConfig().getProperty("disableHostnameVerifier");
+
         String protocol = "https://";
         if (!("true".equalsIgnoreCase(secureConnection))) {
             protocol = "http://";
         }
-        
+
+        //Adds hostnameverifier to check domain/certificate
+        HostnameVerifier verifier = ("true".equalsIgnoreCase(disableHostnameVerifier)) ? 
+                new NullHostnameVerifier() : new PayzenHostnameVerifier();
+        HttpsURLConnection.setDefaultHostnameVerifier(verifier);
+
         //Initialises port
         String wsdlURLStr = protocol + endpointHost + "/vads-ws/v5?wsdl";
         URL wsdlURL;
@@ -67,7 +72,7 @@ public class ClientV5 {
 
     /**
      * Returns Web Service port to Payzen payment API
-     * 
+     *
      * @return port to Payzen Payment API
      */
     public PaymentAPI getPaymentAPIImplPort() {
