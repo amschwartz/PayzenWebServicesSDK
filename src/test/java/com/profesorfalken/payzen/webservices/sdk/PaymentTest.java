@@ -102,10 +102,10 @@ public class PaymentTest {
 
         if (checkConfig()) {
             Map<String, String> config = new HashMap<String, String>();
-            config.put("shopId", "91335531");
-            config.put("shopKey", "8627912856153542");
-            config.put("mode", "TEST");
-            config.put("endpointHost", "payzen-inte01.lyra-labs.fr");
+            config.put("shopId", Config.getConfig().getProperty("shopId"));
+            config.put("shopKey", Config.getConfig().getProperty("shopKey"));
+            config.put("mode", Config.getConfig().getProperty("mode"));
+            config.put("endpointHost", Config.getConfig().getProperty("endpointHost"));
 
             ServiceResult result = create("TestTRS",
                     100,
