@@ -14,7 +14,7 @@ http://mvnrepository.com/artifact/com.profesorfalken/PayzenWebServicesSDK/0.3.1
 
 Instead, you can download manually the last version here:
 
-http://search.maven.org/remotecontent?filepath=com/profesorfalken/PayzenWebServicesSDK/0.2/PayzenWebServicesSDK-0.3.1.jar
+http://search.maven.org/remotecontent?filepath=com/profesorfalken/PayzenWebServicesSDK/0.3.1/PayzenWebServicesSDK-0.3.1.jar
 
 In this last case, you have to add manually the dependencies:
 
