@@ -15,9 +15,12 @@
  */
 package com.profesorfalken.payzen.webservices.sdk;
 
-import com.lyra.vads.ws.v5.CreatePayment;
 import java.util.Date;
 import java.util.Map;
+
+import com.lyra.vads.ws.v5.CreatePayment;
+import com.lyra.vads.ws.v5.PaymentRequest;
+import com.lyra.vads.ws.v5.ValidatePaymentResponse.ValidatePaymentResult;
 
 /**
  * Allows to perform payment related operations using the Payzen API based in 
@@ -275,4 +278,31 @@ public final class Payment {
     public static ServiceResult update(String uuidTransaction, Date captureDate, Map<String, String> ... config) {
         return getInstance().updateSimple((config.length>0)?config[0]:null, uuidTransaction, captureDate);
     }
+    
+    /**
+     * Updates an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param paymentRequest paymentRequest parameters to update
+     * @return result with all the response objects
+     */
+    public static ServiceResult update(String uuidTransaction, PaymentRequest paymentRequest, Map<String, String> ... config) {
+        return getInstance().updateSimple((config.length>0)?config[0]:null, uuidTransaction, paymentRequest);
+    }
+    
+    /**
+     * Validate an existing transaction using the UUID of the transaction<p>
+     * 
+     * Please read official documentation for more detailed information about parameter content.
+     * 
+     * @param uuidTransaction unique identifier of the transaction
+     * @param paymentRequest paymentRequest parameters to update
+     * @return result with all the response objects
+     */
+    public static ValidatePaymentResult validatePayment(String uuidTransaction, String comment, Map<String, String> ... config) {
+        return getInstance().validatePayment((config.length>0)?config[0]:null, uuidTransaction, comment);
+    }
+    
 }
