@@ -20,7 +20,7 @@ For example, for Maven you only have to add to your pom.xml:
         <version>0.3.1</version>
     </dependency>
 
-Instead, you can download manually the last version here:
+Alternatively, you can download manually the last version here:
 
 http://search.maven.org/remotecontent?filepath=com/profesorfalken/PayzenWebServicesSDK/0.3.1/PayzenWebServicesSDK-0.3.1.jar
 
