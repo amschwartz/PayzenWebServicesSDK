@@ -12,6 +12,14 @@ If you use Maven or other software project management tool, you will find the de
 
 http://mvnrepository.com/artifact/com.profesorfalken/PayzenWebServicesSDK/0.3.1
 
+For example, for Maven you have just to add to your pom.xml: 
+
+    <dependency>
+        <groupId>com.profesorfalken</groupId>
+        <artifactId>PayzenWebServicesSDK</artifactId>
+        <version>0.3.1</version>
+    </dependency>
+
 Instead, you can download manually the last version here:
 
 http://search.maven.org/remotecontent?filepath=com/profesorfalken/PayzenWebServicesSDK/0.3.1/PayzenWebServicesSDK-0.3.1.jar
