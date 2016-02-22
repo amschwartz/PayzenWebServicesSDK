@@ -12,7 +12,7 @@ If you use Maven or other software project management tool, you will find the de
 
 http://mvnrepository.com/artifact/com.profesorfalken/PayzenWebServicesSDK/0.3.1
 
-For example, for Maven you have just to add to your pom.xml: 
+For example, for Maven you only have to add to your pom.xml: 
 
     <dependency>
         <groupId>com.profesorfalken</groupId>
