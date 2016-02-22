@@ -298,7 +298,7 @@ public final class Payment {
      * Please read official documentation for more detailed information about parameter content.
      * 
      * @param uuidTransaction unique identifier of the transaction
-     * @param paymentRequest paymentRequest parameters to update
+     * @param comment commentary to add to history
      * @return result with all the response objects
      */
     public static ValidatePaymentResult validatePayment(String uuidTransaction, String comment, Map<String, String> ... config) {
